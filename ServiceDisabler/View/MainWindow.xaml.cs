@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using ServiceDisabler.View;
 
-namespace ServiceDisabler.ViewModel
+namespace ServiceDisabler
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -27,7 +17,29 @@ namespace ServiceDisabler.ViewModel
 
         private void ListViewItem_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            throw new NotImplementedException();
+            OpenPropertiesWindow(sender);
+        }
+
+        private void ServiceItemContextMenu_Click(object sender, RoutedEventArgs e)
+        {
+            OpenPropertiesWindow(sender);
+        }
+
+        private void OpenPropertiesWindow(object sender)
+        {
+            var item = sender as ListViewItem;
+            if (item != null && item.IsSelected)
+            {
+                var popup = new ServiceProperties();
+                popup.ShowDialog();
+                //var selectedService = (Service)ServiceListView.SelectedItem;
+                //var service = new ServiceController(selectedService.Name);
+                //service.Stop();
+                //service.WaitForStatus(ServiceControllerStatus.Stopped);
+
+
+
+            }
         }
     }
 }

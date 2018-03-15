@@ -1,18 +1,25 @@
-﻿<Window x:Class="ServiceDisabler.ViewModel.MainWindow" WindowStartupLocation="CenterScreen"
+﻿<Window x:Class="ServiceDisabler.MainWindow" WindowStartupLocation="CenterScreen"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:viewModel="clr-namespace:ServiceDisabler.ViewModel"
+        xmlns:sd="clr-namespace:ServiceDisabler"
         mc:Ignorable="d"
         DataContext="{DynamicResource ViewModelMain}"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="400" Width="600">
     <Window.Resources>
-        <viewModel:ViewModelMain x:Key="ViewModelMain"/>
+        <sd:ViewModelMain x:Key="ViewModelMain"/>
     </Window.Resources>
     <Grid>
         <ListView x:Name="ServiceListView" Margin="10" ItemsSource="{Binding Services}">
 
+            <!-- context  Menu -->
+            <ListView.ContextMenu>
+                <ContextMenu StaysOpen="true">
+                    <MenuItem Header="Schedule Stop Event" Name="ServiceItemContextMenu" Click="ServiceItemContextMenu_Click"/>
+                </ContextMenu>
+            </ListView.ContextMenu>
+            
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Name" Width="Auto" DisplayMemberBinding="{Binding Name}" />

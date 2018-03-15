@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Management;
-using System.Text;
-using System.Threading.Tasks;
-using ServiceDisabler.Model;
 
-namespace ServiceDisabler.ViewModel
+namespace ServiceDisabler
 {
     internal class ViewModelMain : ViewModelBase
     {
