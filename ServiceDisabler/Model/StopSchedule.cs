@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace ServiceDisabler
 {
-    internal class StopSchedule
+    public class StopSchedule
     {
-        public List<StopTimeRecord> StopTimeRecords { get; set; }
+        public StopTimeRecord[] StopTimeRecords { get; set; }
     }
 }

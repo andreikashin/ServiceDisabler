@@ -6,19 +6,54 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
+using ServiceDisabler.Properties;
 
 namespace ServiceDisabler.Helpers
 {
     public static class XmlHelper
     {
-        public static string ToXml()
+        public static string ToXml(object obj)
         {
-            throw new NotImplementedException();
+            var result = string.Empty;
+
+            return result;
         }
 
-        public static string FromXml()
+        public static void ToXmlFile(object obj, string path)
         {
-            throw new NotImplementedException();
+            using (var writer = XmlWriter.Create(path))
+            {
+                new XmlSerializer(obj.GetType())
+                    .Serialize(writer, obj);
+            }
+        }
+
+        public static T FromXml<T>(string xml)
+        {
+            using (var reader = new StringReader(xml))
+            {
+                return (T)new XmlSerializer(typeof(T))
+                    .Deserialize(reader);
+            }
+        }
+
+        public static T FromXmlFile<T>(string path)
+        {
+            var reader = new StreamReader(path);
+            try
+            {
+                return FromXml<T>(reader.ReadToEnd());
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(string.Format(
+                    Resources.XmlFileReadError, path) +
+                    ex.InnerException?.Message);
+            }
+            finally
+            {
+                reader.Close();
+            }
         }
     }
 }

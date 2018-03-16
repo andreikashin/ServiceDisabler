@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ServiceDisabler
 {
-    internal class StopTimeRecord
+    public class StopTimeRecord
     {
         public string ServiceName { get; set; }
         public DateTimeOffset StopTime { get; set; }
