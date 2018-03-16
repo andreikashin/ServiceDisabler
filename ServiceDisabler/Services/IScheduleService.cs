@@ -9,6 +9,6 @@ namespace ServiceDisabler.Services
     internal interface IScheduleService
     {
         StopSchedule GetSchedule();
-        void UpdateSchedule(List<StopTimeRecord> stopTimeRecords);
+        void UpdateSchedule(StopTimeRecord[] stopTimeRecords);
     }
 }

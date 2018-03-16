@@ -14,9 +14,17 @@ namespace ServiceDisabler.Helpers
     {
         public static string ToXml(object obj)
         {
-            var result = string.Empty;
+            var T = obj.GetType();
 
-            return result;
+            var serializer = new XmlSerializer(T);
+            //var writer = new XmlWriterSettings { Indent = true, NewLineOnAttributes = NewLineOnAttributes, OmitXmlDeclaration = true };
+
+            var builder = new StringBuilder();
+            using (var writer = XmlWriter.Create(builder))
+            {
+                serializer.Serialize(writer, obj);
+            }
+            return builder.ToString();
         }
 
         public static void ToXmlFile(object obj, string path)

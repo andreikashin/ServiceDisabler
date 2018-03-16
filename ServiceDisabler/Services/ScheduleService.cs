@@ -14,7 +14,17 @@ namespace ServiceDisabler.Services
     {
         public StopSchedule GetSchedule()
         {
-            var schedule = new StopSchedule { StopTimeRecords = new StopTimeRecord[] { } };
+            var schedule = new StopSchedule
+            {
+                StopTimeRecords = new[]
+                {
+                    new StopTimeRecord
+                    {
+                        ServiceName = "test",
+                        StopTime = DateTimeOffset.Now
+                    }, 
+                }
+            };
 
             var directory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             var filename = Properties.Settings.Default["ScheduleFilename"].ToString();
@@ -25,10 +35,13 @@ namespace ServiceDisabler.Services
                 return schedule;
             }
 
+            var xml = XmlHelper.ToXml(schedule);
+            XmlHelper.ToXmlFile(xml, fullPath);
+
             return schedule;
         }
 
-        public void UpdateSchedule(List<StopTimeRecord> stopTimeRecords)
+        public void UpdateSchedule(StopTimeRecord[] stopTimeRecords)
         {
             throw new NotImplementedException();
         }
