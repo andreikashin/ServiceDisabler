@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ServiceDisabler;
 using ServiceDisabler.Helpers;
@@ -14,7 +15,7 @@ namespace ServiceDisablerTests
             // Arrange
             var schedule = new StopSchedule
             {
-                StopTimeRecords = new[]
+                StopTimeRecords = new List<StopTimeRecord>
                 {
                     new StopTimeRecord
                     {
@@ -70,7 +71,7 @@ namespace ServiceDisablerTests
             var sch = XmlHelper.FromXml<StopSchedule>(xml);
 
             // Assert
-            Assert.AreEqual(2, sch.StopTimeRecords.Length);
+            Assert.AreEqual(2, sch.StopTimeRecords.Count);
             Assert.AreEqual("test1", sch.StopTimeRecords[0].ServiceName);
             Assert.AreEqual("test2", sch.StopTimeRecords[1].ServiceName);
         }

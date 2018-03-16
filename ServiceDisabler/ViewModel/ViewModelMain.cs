@@ -9,11 +9,19 @@ namespace ServiceDisabler
 {
     internal class ViewModelMain : ViewModelBase
     {
-        private readonly IScheduleService _scheduleService;
+        private ObservableCollection<Service> _services = new ObservableCollection<Service>();
+        public ObservableCollection<Service> Services
+        {
+            get { return _services; }
+            set
+            {
+                _services = value;
+                RaisePropertyChanged(nameof(Services));
+            }
+        }
 
-        public ObservableCollection<Service> Services { get; set; }
-        public StopSchedule StopSchedule { get; set; }
-
+        //public StopSchedule StopSchedule { get; set; }
+        public object SelectedItem { get; set; }
 
         public ViewModelMain() : this(new ScheduleService())
         {
@@ -21,15 +29,16 @@ namespace ServiceDisabler
 
         public ViewModelMain(IScheduleService scheduleService)
         {
-            _scheduleService = scheduleService;
+            ScheduleService = scheduleService;
 
             Services = GetServiceList();
 
             // load schedule
-            StopSchedule = _scheduleService.GetSchedule();
+            StopSchedule = ScheduleService.GetSchedule();
 
             //  service list update timer setup
             var updateServiceListTimer = new System.Windows.Threading.DispatcherTimer();
+            updateServiceListTimer.Tick -= updateServiceListTimer_Tick;
             updateServiceListTimer.Tick += updateServiceListTimer_Tick;
             updateServiceListTimer.Interval = new TimeSpan(0, 0, 0, 10);
             updateServiceListTimer.Start();
@@ -37,6 +46,7 @@ namespace ServiceDisabler
 
             // stop service timer
             var stopServiceTimer = new System.Windows.Threading.DispatcherTimer();
+            stopServiceTimer.Tick -= stopServiceTimer_Tick;
             stopServiceTimer.Tick += stopServiceTimer_Tick;
             stopServiceTimer.Interval = new TimeSpan(0, 0, 0, 1);
             stopServiceTimer.Start();
@@ -47,14 +57,15 @@ namespace ServiceDisabler
             Services = GetServiceList();
             foreach (var service in Services)
             {
-                var records = StopSchedule.StopTimeRecords.ToList();
+                var records = StopSchedule.StopTimeRecords;
                 var scheduledItem = records.Find(rec => rec.ServiceName == service.Name);
                 if (scheduledItem != null)
                 {
                     service.StopTime = scheduledItem.StopTime;
                 }
             }
-            RaisePropertyChanged(nameof(Services));
+            //RaisePropertyChanged(nameof(Services));
+            //RaisePropertyChanged(nameof(StopSchedule));
         }
 
         private void stopServiceTimer_Tick(object sender, EventArgs e)
@@ -71,7 +82,7 @@ namespace ServiceDisabler
             }
         }
 
-        private ObservableCollection<Service> GetServiceList()
+        private static ObservableCollection<Service> GetServiceList()
         {
             var query = new SelectQuery("select * from Win32_Service");
             var result = new ObservableCollection<Service>();

@@ -11,7 +11,7 @@
         <sd:ViewModelMain x:Key="ViewModelMain"/>
     </Window.Resources>
     <Grid>
-        <ListView x:Name="ServiceListView" Margin="10" ItemsSource="{Binding Services}">
+        <ListView x:Name="ServiceListView" SelectedItem="{Binding SelectedItem}" Margin="10" ItemsSource="{Binding Services}">
 
             <!-- context  Menu -->
             <ListView.ContextMenu>

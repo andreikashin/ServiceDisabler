@@ -3,6 +3,6 @@
     internal interface IScheduleService
     {
         StopSchedule GetSchedule();
-        void UpdateSchedule(StopTimeRecord[] stopTimeRecords);
+        void UpdateSchedule(StopSchedule currentSchedule, StopTimeRecord[] newStopTimeRecords);
     }
 }

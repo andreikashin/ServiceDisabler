@@ -1,13 +1,27 @@
-﻿<Window x:Class="ServiceDisabler.View.ServiceProperties"
+﻿<Window x:Class="ServiceDisabler.ServiceProperties"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sd="clr-namespace:ServiceDisabler"
+        xmlns:helpers="clr-namespace:ServiceDisabler.Helpers"
+        helpers:DialogCloser.DialogResult="{Binding CloseWindowFlag}"
+        DataContext="{DynamicResource ViewModelServiceProperties}"
         mc:Ignorable="d"
         Title="ServiceProperties" Height="300" Width="200" ResizeMode="NoResize">
+    <Window.Resources>
+        <sd:ViewModelServiceProperties x:Key="ViewModelServiceProperties"/>
+    </Window.Resources>
     <Grid>
         <StackPanel>
-            <Calendar HorizontalAlignment="Center" VerticalAlignment="Top" Width="189"/>
+            <TextBlock FontSize="10">
+                <Run Text="Set StopTime for " />
+                <Run Text="{Binding SelectedItemName}" />
+            </TextBlock>
+            <!--<Label Content="{Binding SelectedItemName}" />-->
+            <Calendar 
+                SelectedDate="{Binding Path=SelectedDate}" 
+                Name="Calendar" HorizontalAlignment="Center" VerticalAlignment="Top" Width="189" />
 
             <Grid>
                 <Grid.RowDefinitions>
@@ -23,17 +37,17 @@
                 <Label HorizontalAlignment="Center" Content="hh" Grid.Column="0" Grid.Row="0" />
                 <Label HorizontalAlignment="Center" Content="mm" Grid.Column="1" Grid.Row="0" />
                 <Label HorizontalAlignment="Center" Content="ss" Grid.Column="2" Grid.Row="0" />
-                <TextBox TextAlignment="Center" HorizontalAlignment="Center" Height="23" Text="00" Width="40" MaxLength="2" MaxLines="1" Grid.Column="0" Grid.Row="1" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"/>
-                <TextBox TextAlignment="Center" HorizontalAlignment="Center" Height="23" Text="00" Width="40" MaxLength="2" MaxLines="1" Grid.Column="1" Grid.Row="1" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"/>
-                <TextBox TextAlignment="Center" HorizontalAlignment="Center" Height="23" Text="00" Width="40" MaxLength="2" MaxLines="1" Grid.Column="2" Grid.Row="1" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"/>
+                <TextBox Text="{Binding Hour}" Name="Hour" TextAlignment="Center" HorizontalAlignment="Center" Height="23" Width="40" MaxLength="2" MaxLines="1" Grid.Column="0" Grid.Row="1" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"/>
+                <TextBox Text="{Binding Minute}" Name="Minute" TextAlignment="Center" HorizontalAlignment="Center" Height="23" Width="40" MaxLength="2" MaxLines="1" Grid.Column="1" Grid.Row="1" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"/>
+                <TextBox Text="{Binding Second}" Name="Second" TextAlignment="Center" HorizontalAlignment="Center" Height="23" Width="40" MaxLength="2" MaxLines="1" Grid.Column="2" Grid.Row="1" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"/>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" x:Name="ApplyScheduleButton" Content="Apply" HorizontalAlignment="Center" Width="80" Click="ApplyScheduleButton_Click"/>
-                <Button Grid.Column="1" x:Name="CancelScheduleButton" Content="Cancel" HorizontalAlignment="Center" Width="80" Click="CancelScheduleButton_Click"/>
+                <Button Grid.Column="0" x:Name="ApplyScheduleButton" Content="Apply" HorizontalAlignment="Center" Width="80" Command="{Binding ApplyClickCommand}"/>
+                <Button Grid.Column="1" x:Name="CancelScheduleButton" Content="Cancel" HorizontalAlignment="Center" Width="80" Command="{Binding CancelClickCommand}"/>
             </Grid>
         </StackPanel>
     </Grid>

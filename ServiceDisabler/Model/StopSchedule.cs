@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace ServiceDisabler
 {
@@ -6,6 +7,6 @@ namespace ServiceDisabler
     public class StopSchedule
     {
         [XmlElement("Record")]
-        public StopTimeRecord[] StopTimeRecords { get; set; }
+        public List<StopTimeRecord> StopTimeRecords { get; set; }
     }
 }

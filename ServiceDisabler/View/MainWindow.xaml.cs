@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using System.Windows.Input;
-using ServiceDisabler.View;
 
 namespace ServiceDisabler
 {
@@ -29,8 +28,14 @@ namespace ServiceDisabler
             var item = ServiceListView.SelectedItem;
             if (item != null)
             {
-                var popup = new ServiceProperties();
-                popup.ShowDialog();
+                var properties = new ServiceProperties
+                {
+                    DataContext = new ViewModelServiceProperties(ServiceListView.SelectedItem)
+                };
+                properties.Show();
+
+                //var popup = new ServiceProperties();
+                //popup.ShowDialog();
                 //var selectedService = (Service)ServiceListView.SelectedItem;
                 //var service = new ServiceController(selectedService.Name);
                 //service.Stop();

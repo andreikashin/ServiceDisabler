@@ -2,12 +2,12 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace ServiceDisabler.View
+namespace ServiceDisabler
 {
     /// <summary>
     /// Interaction logic for ServiceProperties.xaml
     /// </summary>
-    public partial class ServiceProperties
+    public partial class ServiceProperties : Window
     {
         public ServiceProperties()
         {
@@ -44,7 +44,14 @@ namespace ServiceDisabler.View
 
         private void ApplyScheduleButton_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var date = Calendar.SelectedDate;
+            var hour = Convert.ToInt32(Hour.Text); 
+            var minute = Convert.ToInt32(Minute.Text); 
+            var second = Convert.ToInt32(Second.Text);
+
+            
+
+            var time = sender;
         }
 
         private void CancelScheduleButton_Click(object sender, RoutedEventArgs e)

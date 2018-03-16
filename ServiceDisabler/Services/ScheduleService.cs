@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using ServiceDisabler.Helpers;
 
 namespace ServiceDisabler.Services
@@ -10,7 +12,7 @@ namespace ServiceDisabler.Services
         {
             var schedule = new StopSchedule
             {
-                StopTimeRecords = new[]
+                StopTimeRecords = new List<StopTimeRecord>
                 {
                     new StopTimeRecord
                     {
@@ -35,9 +37,26 @@ namespace ServiceDisabler.Services
             return schedule;
         }
 
-        public void UpdateSchedule(StopTimeRecord[] stopTimeRecords)
+        public void UpdateSchedule(StopSchedule currentSchedule, StopTimeRecord[] newStopTimeRecords)
         {
-            throw new NotImplementedException();
+            var newRecList = newStopTimeRecords.ToList();
+
+            foreach (var newRec in newRecList)
+            {
+                var curr = currentSchedule
+                    .StopTimeRecords
+                    .ToList()
+                    .Find(x => x.ServiceName == newRec.ServiceName);
+
+                if (curr != null)
+                {
+                    curr.StopTime = newRec.StopTime;
+                }
+                else
+                {
+                    currentSchedule.StopTimeRecords.Add(newRec);
+                }
+            }
         }
     }
 }
