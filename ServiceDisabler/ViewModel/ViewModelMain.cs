@@ -1,22 +1,69 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Management;
+using System.ServiceProcess;
+using ServiceDisabler.Services;
 
 namespace ServiceDisabler
 {
     internal class ViewModelMain : ViewModelBase
     {
-        public List<Service> Services { get; set; }
+        private readonly IScheduleService _scheduleService;
 
-        public ViewModelMain()
+        public ObservableCollection<Service> Services { get; set; }
+        public StopSchedule StopSchedule { get; set; }
+
+
+        public ViewModelMain() : this(new ScheduleService())
         {
-            Services = GetServiceList();
         }
 
-        private List<Service> GetServiceList()
+        public ViewModelMain(IScheduleService scheduleService)
+        {
+            _scheduleService = scheduleService;
+
+            Services = GetServiceList();
+
+            // load schedule
+            StopSchedule = _scheduleService.GetSchedule();
+
+            //  service list update timer setup
+            var updateServiceListTimer = new System.Windows.Threading.DispatcherTimer();
+            updateServiceListTimer.Tick += updateServiceListTimer_Tick;
+            updateServiceListTimer.Interval = new TimeSpan(0, 0, 0, 10);
+            updateServiceListTimer.Start();
+            updateServiceListTimer_Tick(null, null);
+
+            // stop service timer
+            var stopServiceTimer = new System.Windows.Threading.DispatcherTimer();
+            stopServiceTimer.Tick += stopServiceTimer_Tick;
+            stopServiceTimer.Interval = new TimeSpan(0, 0, 0, 1);
+            stopServiceTimer.Start();
+        }
+
+        private void updateServiceListTimer_Tick(object sender, EventArgs e)
+        {
+            Services = GetServiceList();
+            RaisePropertyChanged(nameof(Services));
+        }
+
+        private void stopServiceTimer_Tick(object sender, EventArgs e)
+        {
+            var stopRecords = StopSchedule.StopTimeRecords.Where(x => x.StopTime == DateTimeOffset.Now);
+            foreach (var rec in stopRecords)
+            {
+                var service = new ServiceController(rec.ServiceName);
+                service.Stop();
+                service.WaitForStatus(ServiceControllerStatus.Stopped);
+            }
+        }
+
+        private ObservableCollection<Service> GetServiceList()
         {
             var query = new SelectQuery("select * from Win32_Service");
-            var result = new List<Service>();
+            var result = new ObservableCollection<Service>();
             using (var searcher = new ManagementObjectSearcher(query))
             {
                 foreach (var o in searcher.Get())
@@ -31,7 +78,7 @@ namespace ServiceDisabler
                         State = $"{service["State"]}",
                         Status = $"{service["Status"]}",
 
-                        StopTime = DateTime.Now,
+                        //StopTime = DateTime.Now,
                     });
                 }
             }

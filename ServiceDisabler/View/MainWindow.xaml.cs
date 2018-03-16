@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using ServiceDisabler.View;
@@ -15,20 +16,20 @@ namespace ServiceDisabler
             InitializeComponent();
         }
 
-        private void ListViewItem_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            OpenPropertiesWindow(sender);
+            OpenPropertiesWindow();
         }
 
         private void ServiceItemContextMenu_Click(object sender, RoutedEventArgs e)
         {
-            OpenPropertiesWindow(sender);
+            OpenPropertiesWindow();
         }
 
-        private void OpenPropertiesWindow(object sender)
+        private void OpenPropertiesWindow()
         {
-            var item = sender as ListViewItem;
-            if (item != null && item.IsSelected)
+            var item = ServiceListView.SelectedItem;
+            if (item != null)
             {
                 var popup = new ServiceProperties();
                 popup.ShowDialog();

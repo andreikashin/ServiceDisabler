@@ -10,6 +10,6 @@ namespace ServiceDisabler
         public string State { get; set; } // Running | Stopped
         public string Status { get; set; } // OK | UNKNOWN
 
-        public DateTime StopTime { get; set; }
+        public DateTimeOffset? StopTime { get; set; }
     }
 }

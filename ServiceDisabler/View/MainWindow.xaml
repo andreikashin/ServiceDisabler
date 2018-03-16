@@ -16,25 +16,29 @@
             <!-- context  Menu -->
             <ListView.ContextMenu>
                 <ContextMenu StaysOpen="true">
-                    <MenuItem Header="Schedule Stop Event" Name="ServiceItemContextMenu" Click="ServiceItemContextMenu_Click"/>
+                    <MenuItem 
+                        Header="Schedule Stop Event" 
+                        Name="ServiceItemContextMenu" 
+                        Click="ServiceItemContextMenu_Click"
+                        />
                 </ContextMenu>
             </ListView.ContextMenu>
-            
+
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Name" Width="Auto" DisplayMemberBinding="{Binding Name}" />
-                    <GridViewColumn Header="ProcessId" Width="Auto" DisplayMemberBinding="{Binding ProcessId}" />
-                    <GridViewColumn Header="StartMode" Width="Auto" DisplayMemberBinding="{Binding StartMode}" />
-                    <GridViewColumn Header="State" Width="Auto" DisplayMemberBinding="{Binding State}" />
-                    <GridViewColumn Header="Status" Width="Auto" DisplayMemberBinding="{Binding Status}" />
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Header="Process Id" DisplayMemberBinding="{Binding ProcessId}" />
+                    <GridViewColumn Header="Start Mode" DisplayMemberBinding="{Binding StartMode}" />
+                    <GridViewColumn Header="State" DisplayMemberBinding="{Binding State}" />
+                    <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" />
 
-                    <GridViewColumn Header="Stop" Width="Auto" DisplayMemberBinding="{Binding StopTime}" />
+                    <GridViewColumn Header="Stop Time" DisplayMemberBinding="{Binding StopTime}" />
                 </GridView>
             </ListView.View>
 
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
-                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListViewItem_PreviewMouseDoubleClick" />
+                    <EventSetter Event="MouseDoubleClick" Handler="ListViewItem_MouseDoubleClick" />
                 </Style>
             </ListView.ItemContainerStyle>
         </ListView>
