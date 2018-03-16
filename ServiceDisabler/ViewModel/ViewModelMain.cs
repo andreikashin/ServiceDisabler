@@ -45,12 +45,24 @@ namespace ServiceDisabler
         private void updateServiceListTimer_Tick(object sender, EventArgs e)
         {
             Services = GetServiceList();
+            foreach (var service in Services)
+            {
+                var records = StopSchedule.StopTimeRecords.ToList();
+                var scheduledItem = records.Find(rec => rec.ServiceName == service.Name);
+                if (scheduledItem != null)
+                {
+                    service.StopTime = scheduledItem.StopTime;
+                }
+            }
             RaisePropertyChanged(nameof(Services));
         }
 
         private void stopServiceTimer_Tick(object sender, EventArgs e)
         {
-            var stopRecords = StopSchedule.StopTimeRecords.Where(x => x.StopTime == DateTimeOffset.Now);
+            var stopRecords = StopSchedule.StopTimeRecords.Where(
+                x => x.StopTime > DateTimeOffset.Now &&
+                     x.StopTime < DateTimeOffset.Now.AddSeconds(1));
+
             foreach (var rec in stopRecords)
             {
                 var service = new ServiceController(rec.ServiceName);
