@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Management;
 using System.ServiceProcess;
@@ -13,6 +14,7 @@ namespace ServiceDisabler
 {
     internal class MainViewModel : BaseViewModel
     {
+
         private ObservableCollection<Service> _services = new ObservableCollection<Service>();
         public ObservableCollection<Service> Services
         {
@@ -28,7 +30,9 @@ namespace ServiceDisabler
 
         internal DispatcherTimer updateServiceListTimer;
 
-        //public StopSchedule StopSchedule { get; set; }
+        public IScheduleService ScheduleService;
+        public StopSchedule StopSchedule { get; set; }
+
         public object SelectedItem { get; set; }
         public Service SelectedService { get; set; }
 
@@ -39,14 +43,8 @@ namespace ServiceDisabler
         public MainViewModel(IScheduleService scheduleService)
         {
             ShowSetStopCommand = new DelegateCommand(ShowStopSettings);
-
-
             ScheduleService = scheduleService;
-
-            
-
             Services = GetServiceList();
-            //SelectedService = Services.FirstOrDefault(x => x.Name == ((ListViewItem)SelectedItem).Name);
 
             // load schedule
             StopSchedule = ScheduleService.GetSchedule();
@@ -56,7 +54,7 @@ namespace ServiceDisabler
             updateServiceListTimer.Tick -= updateServiceListTimer_Tick;
             updateServiceListTimer.Tick += updateServiceListTimer_Tick;
             updateServiceListTimer.Interval = TimeSpan.FromSeconds(10);
-            //updateServiceListTimer.Start();
+            updateServiceListTimer.Start();
             updateServiceListTimer_Tick(null, null);
 
             // stop service timer
@@ -64,7 +62,7 @@ namespace ServiceDisabler
             stopServiceTimer.Tick -= stopServiceTimer_Tick;
             stopServiceTimer.Tick += stopServiceTimer_Tick;
             stopServiceTimer.Interval = new TimeSpan(0, 0, 0, 1);
-            //stopServiceTimer.Start();
+            stopServiceTimer.Start();
         }
 
         private void updateServiceListTimer_Tick(object sender, EventArgs e)
@@ -127,7 +125,7 @@ namespace ServiceDisabler
             SelectedService = (Service)SelectedItem;
 
             var propertiesWindow = new StopSettingsViewModel();
-
+            
             propertiesWindow.Closed += r =>
             {
                 SelectedService.Name = r.Name;
@@ -147,6 +145,9 @@ namespace ServiceDisabler
 
                 SelectedService.StopTime = r.StopTime;
                 RaisePropertyChanged(nameof(Service.StopTime));
+
+                SelectedService.StopTimeDisplay = r.StopTime?.ToString(CultureInfo.CurrentCulture);
+                RaisePropertyChanged(nameof(Service.StopTimeDisplay));
             };
 
             propertiesWindow.Show(SelectedService);

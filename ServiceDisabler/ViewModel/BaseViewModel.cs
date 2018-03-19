@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Threading;
@@ -8,8 +9,6 @@ namespace ServiceDisabler
 {
     internal class BaseViewModel : INotifyPropertyChanged
     {
-        public IScheduleService ScheduleService;
-        public StopSchedule StopSchedule { get; set; }
 
         //basic BaseViewModel
         internal void RaisePropertyChanged(string prop)

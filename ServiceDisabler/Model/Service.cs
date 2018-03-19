@@ -1,10 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Windows.Threading;
 
 namespace ServiceDisabler
 {
-    internal class Service
+    internal class Service : INotifyPropertyChanged
     {
         private string _name;
         public string Name
@@ -85,11 +86,26 @@ namespace ServiceDisabler
                 if (_stopTime != value)
                 {
                     _stopTime = value;
+                    StopTimeDisplay = _stopTime?.ToString(CultureInfo.CurrentCulture);
+                    RaisePropertyChanged(nameof(StopTimeDisplay));
                     RaisePropertyChanged(nameof(StopTime));
                 }
             }
         }
 
+        private string _stopTimeDisplay;
+        public string StopTimeDisplay
+        {
+            get { return _stopTimeDisplay; }
+            set
+            {
+                if (_stopTimeDisplay != value)
+                {
+                    _stopTimeDisplay = value;
+                    RaisePropertyChanged(nameof(StopTimeDisplay));
+                }
+            }
+        }
 
         public DispatcherTimer UpdateServiceListTimer => new DispatcherTimer();
 

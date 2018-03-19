@@ -14,7 +14,7 @@ namespace ServiceDisabler.Helpers
                 currentDateTime.Year,
                 currentDateTime.Month,
                 currentDateTime.Day,
-                hours, minutes, seconds);
+                hours, minutes, seconds, 0);
         }
     }
 }

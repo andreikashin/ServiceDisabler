@@ -11,7 +11,7 @@
         <sd:MainViewModel x:Key="MainViewModel"/>
     </Window.Resources>
     <Grid>
-        <ListView x:Name="ServiceListView" SelectedItem="{Binding SelectedItem}" Margin="10" ItemsSource="{Binding Services}">
+        <ListView x:Name="ServiceListView" SelectedItem="{Binding SelectedItem}" Margin="10" ItemsSource="{Binding Path=Services}">
 
             <!-- context  Menu -->
             <ListView.ContextMenu>
@@ -32,7 +32,7 @@
                     <GridViewColumn Header="State" DisplayMemberBinding="{Binding State}" />
                     <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" />
 
-                    <GridViewColumn Header="Stop Time" DisplayMemberBinding="{Binding StopTime}" />
+                    <GridViewColumn Header="Stop Time" DisplayMemberBinding="{Binding Path=StopTimeDisplay}" />
                 </GridView>
             </ListView.View>
 

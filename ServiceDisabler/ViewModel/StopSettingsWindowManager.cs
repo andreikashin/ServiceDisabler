@@ -46,17 +46,17 @@ namespace ServiceDisabler
         public void ShowSettingsWindow(FrameworkElement content)
         {
             Content = content;
-            //RaisePropertyChanged();
+            //RaisePropertyChanged(nameof(Content));
             Visibility = Visibility.Visible;
-            //RaisePropertyChanged();
+            //RaisePropertyChanged(nameof(Visibility));
         }
 
         public void CloseSettingsWindow()
         {
             Visibility = Visibility.Collapsed;
-            //RaisePropertyChanged();
+            //RaisePropertyChanged(nameof(Visibility));
             Content = null;
-            //RaisePropertyChanged();
+            //RaisePropertyChanged(nameof(Content));
         }
     }
 }

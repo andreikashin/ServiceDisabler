@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using ServiceDisabler.Helpers;
+using ServiceDisabler.Services;
 
 namespace ServiceDisabler
 {
@@ -78,58 +79,58 @@ namespace ServiceDisabler
         //{
         //}
 
-        public StopSettingsViewModel()
-        {
+        //public StopSettingsViewModel()
+        //{
             
-            //ApplyClickCommand = new RelayCommand(Apply);
-            //CancelClickCommand = new RelayCommand(Cancel);
-            //SelectedItemName = ((Service)selectedItem).Name;
-        }
+        //    //ApplyClickCommand = new RelayCommand(Apply);
+        //    //CancelClickCommand = new RelayCommand(Cancel);
+        //    //SelectedItemName = ((Service)selectedItem).Name;
+        //}
 
-        private void Apply(object parameter)
-        {
-            var name = SelectedItemName == string.Empty
-                ? "Unknown"
-                : SelectedItemName;
+        //private void Apply(object parameter)
+        //{
+        //    var name = SelectedItemName == string.Empty
+        //        ? "Unknown"
+        //        : SelectedItemName;
 
-            var date = SelectedDate
-                .Equals(DateTime.MinValue)
-                ? DateTime.Today
-                : SelectedDate;
+        //    var date = SelectedDate
+        //        .Equals(DateTime.MinValue)
+        //        ? DateTime.Today
+        //        : SelectedDate;
 
-            if (Hour != string.Empty)
-            {
-                date = date.AddHours(Convert.ToInt32(Hour));
-            }
+        //    if (Hour != string.Empty)
+        //    {
+        //        date = date.AddHours(Convert.ToInt32(Hour));
+        //    }
 
-            if (Minute != string.Empty)
-            {
-                date = date.AddHours(Convert.ToInt32(Minute));
-            }
+        //    if (Minute != string.Empty)
+        //    {
+        //        date = date.AddHours(Convert.ToInt32(Minute));
+        //    }
 
-            if (Second != string.Empty)
-            {
-                date = date.AddHours(Convert.ToInt32(Second));
-            }
+        //    if (Second != string.Empty)
+        //    {
+        //        date = date.AddHours(Convert.ToInt32(Second));
+        //    }
 
-            var newSchedule = new[]
-            {
-                new StopTimeRecord
-                {
-                    ServiceName = name,
-                    StopTime = new DateTimeOffset(date)
-                },
-            };
+        //    var newSchedule = new[]
+        //    {
+        //        new StopTimeRecord
+        //        {
+        //            ServiceName = name,
+        //            StopTime = new DateTimeOffset(date)
+        //        },
+        //    };
 
-            ScheduleService.UpdateSchedule(StopSchedule, newSchedule);
-            RaisePropertyChanged(nameof(StopSchedule));
-            CloseWindow();
-        }
+        //    ScheduleService.UpdateSchedule(StopSchedule, newSchedule);
+        //    RaisePropertyChanged(nameof(StopSchedule));
+        //    CloseWindow();
+        //}
 
-        private void Cancel(object parameter)
-        {
-            CloseWindow();
-        }
+        //private void Cancel(object parameter)
+        //{
+        //    CloseWindow();
+        //}
 
         public void Show(Service service)
         {
@@ -142,6 +143,7 @@ namespace ServiceDisabler
         {
             Closed?.Invoke(service);
             StopSettingsWindowManager.Instance.CloseSettingsWindow();
+            RaisePropertyChanged(nameof(Services));
         }
     }
 }

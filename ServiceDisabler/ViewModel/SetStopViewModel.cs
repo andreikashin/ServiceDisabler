@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Prism.Commands;
+using ServiceDisabler.Helpers;
 
 namespace ServiceDisabler
 {
@@ -13,7 +14,18 @@ namespace ServiceDisabler
 
         public Service StopService { get; set; }
         public string SelectedItemName { get; set; }
-        public DateTimeOffset? SelectedDate { get; set; }
+
+        private DateTime _selectedDate;
+        public DateTime SelectedDate
+        {
+            get { return _selectedDate; }
+            set
+            {
+                _selectedDate = value;
+                RaisePropertyChanged(nameof(SelectedDate));
+            }
+        }
+
         public int Hour { get; set; }
         public int Minute { get; set; }
         public int Second { get; set; }
@@ -27,6 +39,7 @@ namespace ServiceDisabler
             ApplyCommand = new DelegateCommand(SaveStopDateTime);
             CancelCommand = new DelegateCommand(() => this.CloseWindow());
             StopService = service;
+            SelectedDate = DateTime.Now;
         }
 
         private void SaveStopDateTime()
@@ -34,7 +47,10 @@ namespace ServiceDisabler
             if (Closed != null)
             {
                 var service = StopService;
-                service.StopTime = new DateTimeOffset();
+                var newDateTime = new DateTimeOffset(SelectedDate);
+                newDateTime.SetTime(Hour, Minute, Second);
+                service.StopTime = newDateTime;
+
                 Closed(service);
             }
         }

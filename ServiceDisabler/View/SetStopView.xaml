@@ -10,11 +10,11 @@
         <StackPanel>
             <TextBlock FontSize="10">
                 <Run Text="Set StopTime for " />
-                <Run Text="{Binding SelectedItemName}" />
+                <Run Text="{Binding SelectedItemName, Mode=TwoWay}" />
             </TextBlock>
             <!--<Label Content="{Binding SelectedItemName}" />-->
             <Calendar 
-                SelectedDate="{Binding SelectedDate}" 
+                SelectedDate="{Binding SelectedDate, Mode=TwoWay}"
                 Name="Calendar" HorizontalAlignment="Center" VerticalAlignment="Top" Width="189" />
 
             <Grid>
