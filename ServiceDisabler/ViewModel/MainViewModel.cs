@@ -4,10 +4,8 @@ using System.Globalization;
 using System.Linq;
 using System.Management;
 using System.ServiceProcess;
-using System.Windows.Controls;
 using System.Windows.Threading;
 using Prism.Commands;
-using ServiceDisabler.Helpers;
 using ServiceDisabler.Services;
 
 namespace ServiceDisabler

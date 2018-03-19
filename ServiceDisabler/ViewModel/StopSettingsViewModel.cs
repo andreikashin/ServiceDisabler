@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using ServiceDisabler.Helpers;
-using ServiceDisabler.Services;
 
 namespace ServiceDisabler
 {
@@ -141,6 +135,12 @@ namespace ServiceDisabler
 
         void StopSettingsWindow_Closed(Service service)
         {
+            if (service == null)
+            {
+                StopSettingsWindowManager.Instance.CloseSettingsWindow();
+                //RaisePropertyChanged(nameof(Services));
+                return;
+            }
             Closed?.Invoke(service);
             StopSettingsWindowManager.Instance.CloseSettingsWindow();
             RaisePropertyChanged(nameof(Services));

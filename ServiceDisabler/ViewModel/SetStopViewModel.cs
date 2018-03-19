@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Prism.Commands;
 using ServiceDisabler.Helpers;
 
@@ -37,7 +33,7 @@ namespace ServiceDisabler
         public SetStopViewModel(Service service)
         {
             ApplyCommand = new DelegateCommand(SaveStopDateTime);
-            CancelCommand = new DelegateCommand(() => this.CloseWindow());
+            CancelCommand = new DelegateCommand(() => Closed?.Invoke(null));
             StopService = service;
             SelectedDate = DateTime.Now;
         }
