@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace ServiceDisabler
@@ -11,11 +12,21 @@ namespace ServiceDisabler
         public MainWindow()
         {
             InitializeComponent();
+            StopSettingsWindow.DataContext = StopSettingsWindowManager.Instance;
+            DataContext = new MainViewModel();
         }
 
         private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            OpenPropertiesWindow();
+            var item = sender as ListViewItem;
+
+            var vm = item?.DataContext as MainViewModel;
+
+            if (vm?.ShowSetStopCommand != null && 
+                vm.ShowSetStopCommand.CanExecute())
+            {
+                vm.ShowSetStopCommand.Execute();
+            }
         }
 
         private void ServiceItemContextMenu_Click(object sender, RoutedEventArgs e)
@@ -28,13 +39,13 @@ namespace ServiceDisabler
             var item = ServiceListView.SelectedItem;
             if (item != null)
             {
-                var properties = new ServiceProperties
+                var name = ((ListViewItem) item).Name;
+                var properties = new SetStopView
                 {
-                    DataContext = new ViewModelServiceProperties(ServiceListView.SelectedItem)
+                    DataContext = new StopSettingsViewModel()
                 };
-                properties.Show();
 
-                //var popup = new ServiceProperties();
+                //var popup = new StopSettingsWindow();
                 //popup.ShowDialog();
                 //var selectedService = (Service)ServiceListView.SelectedItem;
                 //var service = new ServiceController(selectedService.Name);
@@ -45,5 +56,8 @@ namespace ServiceDisabler
 
             }
         }
+
+        internal MainViewModel Vm => (MainViewModel)DataContext;
+        
     }
 }

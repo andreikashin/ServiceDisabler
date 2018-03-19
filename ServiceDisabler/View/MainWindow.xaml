@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sd="clr-namespace:ServiceDisabler"
         mc:Ignorable="d"
-        DataContext="{DynamicResource ViewModelMain}"
+        DataContext="{DynamicResource MainViewModel}"
         Title="MainWindow" Height="400" Width="600">
     <Window.Resources>
-        <sd:ViewModelMain x:Key="ViewModelMain"/>
+        <sd:MainViewModel x:Key="MainViewModel"/>
     </Window.Resources>
     <Grid>
         <ListView x:Name="ServiceListView" SelectedItem="{Binding SelectedItem}" Margin="10" ItemsSource="{Binding Services}">
@@ -19,7 +19,7 @@
                     <MenuItem 
                         Header="Schedule Stop Event" 
                         Name="ServiceItemContextMenu" 
-                        Click="ServiceItemContextMenu_Click"
+                        Command="{Binding ShowSetStopCommand}"
                         />
                 </ContextMenu>
             </ListView.ContextMenu>
@@ -42,5 +42,13 @@
                 </Style>
             </ListView.ItemContainerStyle>
         </ListView>
+        <Border Name="StopSettingsWindow" Visibility="{Binding Visibility}" Background="DimGray">
+            <ContentControl 
+                Content="{Binding Content}" 
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center" 
+                HorizontalContentAlignment="Stretch" 
+                VerticalContentAlignment="Stretch"/>
+        </Border>
     </Grid>
 </Window>
