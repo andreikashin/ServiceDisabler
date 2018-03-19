@@ -58,5 +58,16 @@ namespace ServiceDisabler.Services
                 }
             }
         }
+
+        public void SaveSchedule(StopSchedule currentSchedule)
+        {
+            var directory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            var filename = Properties.Settings.Default["ScheduleFilename"].ToString();
+            var fullPath = Path.Combine(directory, filename);
+            if (Directory.Exists(directory))
+            {
+                XmlHelper.ToXmlFile(currentSchedule, fullPath);
+            }
+        }
     }
 }

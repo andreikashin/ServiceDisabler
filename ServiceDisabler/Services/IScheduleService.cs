@@ -4,5 +4,6 @@
     {
         StopSchedule GetSchedule();
         void UpdateSchedule(StopSchedule currentSchedule, StopTimeRecord[] newStopTimeRecords);
+        void SaveSchedule(StopSchedule currentSchedule);
     }
 }

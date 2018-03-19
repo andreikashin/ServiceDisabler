@@ -1,14 +1,25 @@
 ﻿using System;
+using System.Linq;
 using Prism.Commands;
 using ServiceDisabler.Helpers;
 
 namespace ServiceDisabler
 {
-    internal class SetStopViewModel : BaseViewModel
+    internal class SetStopViewModel : MainViewModel
     {
         public event Action<Service> Closed;
 
-        public Service StopService { get; set; }
+        private Service _stopService;
+        public Service StopService
+        {
+            get { return _stopService; }
+            set
+            {
+                _stopService = value;
+                RaisePropertyChanged(nameof(StopService));
+            }
+        }
+
         public string SelectedItemName { get; set; }
 
         private DateTime _selectedDate;
@@ -40,14 +51,24 @@ namespace ServiceDisabler
 
         private void SaveStopDateTime()
         {
-            if (Closed != null)
+            if (Closed != null && StopService != null)
             {
                 var service = StopService;
                 var newDateTime = new DateTimeOffset(SelectedDate);
                 newDateTime.SetTime(Hour, Minute, Second);
                 service.StopTime = newDateTime;
+                if (StopSchedule.StopTimeRecords.Any(x => x.ServiceName == service.Name))
+                {
+                    StopSchedule.StopTimeRecords.Distinct().ToList().Add(
+                        new StopTimeRecord
+                        {
+                            ServiceName = service.Name,
+                            StopTime = service.StopTime
+                        });
+                }
+                RaisePropertyChanged(nameof(StopSchedule));
 
-                Closed(service);
+                Closed?.Invoke(service);
             }
         }
     }

@@ -14,7 +14,6 @@ namespace ServiceDisabler.Helpers
             var T = obj.GetType();
 
             var serializer = new XmlSerializer(T);
-            //var writer = new XmlWriterSettings { Indent = true, NewLineOnAttributes = NewLineOnAttributes, OmitXmlDeclaration = true };
 
             var builder = new StringBuilder();
             using (var writer = XmlWriter.Create(builder))
@@ -26,11 +25,13 @@ namespace ServiceDisabler.Helpers
 
         public static void ToXmlFile(object obj, string path)
         {
-            using (var writer = XmlWriter.Create(path))
+            using (var fs = new FileStream(path, FileMode.Create))
+            using (var writer = XmlWriter.Create(fs))
             {
                 new XmlSerializer(obj.GetType())
                     .Serialize(writer, obj);
             }
+
         }
 
         public static T FromXml<T>(string xml)

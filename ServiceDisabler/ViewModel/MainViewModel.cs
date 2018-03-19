@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Management;
 using System.ServiceProcess;
+using System.Windows;
 using System.Windows.Threading;
 using Prism.Commands;
 using ServiceDisabler.Services;
@@ -24,15 +26,28 @@ namespace ServiceDisabler
             }
         }
 
+        private StopSchedule _stopSchedule;
+        public StopSchedule StopSchedule
+        {
+            get { return _stopSchedule; }
+            set
+            {
+                _stopSchedule = value;
+                RaisePropertyChanged(nameof(StopSchedule));
+            }
+        }
+
+        public object SelectedItem { get; set; }
+
+
+        public Service SelectedService { get; set; }
+
         public DelegateCommand ShowSetStopCommand { get; }
 
         internal DispatcherTimer updateServiceListTimer;
 
         public IScheduleService ScheduleService;
-        public StopSchedule StopSchedule { get; set; }
 
-        public object SelectedItem { get; set; }
-        public Service SelectedService { get; set; }
 
         public MainViewModel() : this(new ScheduleService())
         {
@@ -101,7 +116,6 @@ namespace ServiceDisabler
             {
                 foreach (var o in searcher.Get())
                 {
-                    //var searcherProperties = o.Properties;
                     var service = (ManagementObject)o;
                     result.Add(new Service
                     {
@@ -110,8 +124,6 @@ namespace ServiceDisabler
                         StartMode = $"{service["StartMode"]}",
                         State = $"{service["State"]}",
                         Status = $"{service["Status"]}",
-
-                        //StopTime = DateTime.Now,
                     });
                 }
             }
@@ -146,9 +158,36 @@ namespace ServiceDisabler
 
                 SelectedService.StopTimeDisplay = r.StopTime?.ToString(CultureInfo.CurrentCulture);
                 RaisePropertyChanged(nameof(Service.StopTimeDisplay));
+
+                var distinctRecords = StopSchedule.StopTimeRecords.Distinct().ToList();
+
+                distinctRecords.RemoveAll(x => x.ServiceName == r.Name);
+
+                distinctRecords.Add(new StopTimeRecord
+                {
+                    ServiceName = r.Name,
+                    StopTime = r.StopTime
+                });
+                
+
+                StopSchedule.StopTimeRecords = distinctRecords;
             };
 
             propertiesWindow.Show(SelectedService);
+        }
+
+        public void OnWindowClosing(object sender, CancelEventArgs e)
+        {
+            var vm = ((Window)sender).DataContext as MainViewModel;
+            var service = vm?.ScheduleService;
+
+            var records = vm?.StopSchedule?.StopTimeRecords.Distinct();
+            var distinctSchedule = new StopSchedule
+            {
+                StopTimeRecords = records?.ToList()
+            };
+
+            service?.SaveSchedule(distinctSchedule);
         }
     }
 }

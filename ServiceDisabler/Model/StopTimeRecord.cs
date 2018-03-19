@@ -11,11 +11,11 @@ namespace ServiceDisabler
         [XmlElement("StopTime")]
         public string StopTimeForXml
         {
-            get { return StopTime.ToString(CultureInfo.InvariantCulture); }
+            get { return StopTime?.ToString(CultureInfo.InvariantCulture); }
             set { StopTime = DateTimeOffset.Parse(value, CultureInfo.InvariantCulture); }
         }
 
         [XmlIgnore]
-        public DateTimeOffset StopTime { get; set; }
+        public DateTimeOffset? StopTime { get; set; }
     }
 }

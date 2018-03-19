@@ -143,6 +143,8 @@ namespace ServiceDisabler
             }
             Closed?.Invoke(service);
             StopSettingsWindowManager.Instance.CloseSettingsWindow();
+
+
             RaisePropertyChanged(nameof(Services));
         }
     }
