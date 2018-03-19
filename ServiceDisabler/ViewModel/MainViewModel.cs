@@ -14,8 +14,9 @@ namespace ServiceDisabler
 {
     internal class MainViewModel : BaseViewModel
     {
-
-        private ObservableCollection<Service> _services = new ObservableCollection<Service>();
+        /// <summary>
+        /// Collection of all services
+        /// </summary>
         public ObservableCollection<Service> Services
         {
             get { return _services; }
@@ -25,8 +26,11 @@ namespace ServiceDisabler
                 RaisePropertyChanged(nameof(Services));
             }
         }
+        private ObservableCollection<Service> _services = new ObservableCollection<Service>();
 
-        private StopSchedule _stopSchedule;
+        /// <summary>
+        /// Scheduke of stop events
+        /// </summary>
         public StopSchedule StopSchedule
         {
             get { return _stopSchedule; }
@@ -36,15 +40,21 @@ namespace ServiceDisabler
                 RaisePropertyChanged(nameof(StopSchedule));
             }
         }
+        private StopSchedule _stopSchedule;
 
+        /// <summary>
+        /// The item selected in list
+        /// </summary>
         public object SelectedItem { get; set; }
 
-
+        /// <summary>
+        /// Selected service
+        /// </summary>
         public Service SelectedService { get; set; }
 
         public DelegateCommand ShowSetStopCommand { get; }
 
-        internal DispatcherTimer updateServiceListTimer;
+        //private DispatcherTimer _updateServiceListTimer;
 
         public IScheduleService ScheduleService;
 
@@ -55,7 +65,7 @@ namespace ServiceDisabler
 
         public MainViewModel(IScheduleService scheduleService)
         {
-            ShowSetStopCommand = new DelegateCommand(ShowStopSettings);
+            ShowSetStopCommand = new DelegateCommand(ShowStopSchedule);
             ScheduleService = scheduleService;
             Services = GetServiceList();
 
@@ -63,7 +73,7 @@ namespace ServiceDisabler
             StopSchedule = ScheduleService.GetSchedule();
 
             //  service list update timer setup
-            updateServiceListTimer = new DispatcherTimer();
+            var updateServiceListTimer = new DispatcherTimer();
             updateServiceListTimer.Tick -= updateServiceListTimer_Tick;
             updateServiceListTimer.Tick += updateServiceListTimer_Tick;
             updateServiceListTimer.Interval = TimeSpan.FromSeconds(10);
@@ -78,6 +88,11 @@ namespace ServiceDisabler
             stopServiceTimer.Start();
         }
 
+        /// <summary>
+        /// Handler for update list timer event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void updateServiceListTimer_Tick(object sender, EventArgs e)
         {
             Services = GetServiceList();
@@ -90,10 +105,13 @@ namespace ServiceDisabler
                     service.StopTime = scheduledItem.StopTime;
                 }
             }
-            //RaisePropertyChanged(nameof(Services));
-            //RaisePropertyChanged(nameof(StopSchedule));
         }
 
+        /// <summary>
+        /// Handler for Stopservice timer event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void stopServiceTimer_Tick(object sender, EventArgs e)
         {
             var stopRecords = StopSchedule.StopTimeRecords.Where(
@@ -108,6 +126,10 @@ namespace ServiceDisabler
             }
         }
 
+        /// <summary>
+        /// Get list of all Windows services
+        /// </summary>
+        /// <returns>Windows services</returns>
         private static ObservableCollection<Service> GetServiceList()
         {
             var query = new SelectQuery("select * from Win32_Service");
@@ -130,13 +152,16 @@ namespace ServiceDisabler
             return result;
         }
 
-        private void ShowStopSettings()
+        /// <summary>
+        /// Show stop scheduler view
+        /// </summary>
+        private void ShowStopSchedule()
         {
             SelectedService = (Service)SelectedItem;
 
-            var propertiesWindow = new StopSettingsViewModel();
+            var schedulerWindow = new StopSchedulerViewModel();
             
-            propertiesWindow.Closed += r =>
+            schedulerWindow.Closed += r =>
             {
                 SelectedService.Name = r.Name;
                 RaisePropertyChanged(nameof(Service.Name));
@@ -173,9 +198,14 @@ namespace ServiceDisabler
                 StopSchedule.StopTimeRecords = distinctRecords;
             };
 
-            propertiesWindow.Show(SelectedService);
+            schedulerWindow.Show(SelectedService);
         }
 
+        /// <summary>
+        /// Handler for window close event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void OnWindowClosing(object sender, CancelEventArgs e)
         {
             var vm = ((Window)sender).DataContext as MainViewModel;

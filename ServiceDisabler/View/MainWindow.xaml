@@ -35,12 +35,6 @@
                     <GridViewColumn Header="Stop Time" DisplayMemberBinding="{Binding Path=StopTimeDisplay}" />
                 </GridView>
             </ListView.View>
-
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <EventSetter Event="MouseDoubleClick" Handler="ListViewItem_MouseDoubleClick" />
-                </Style>
-            </ListView.ItemContainerStyle>
         </ListView>
         <Border Name="StopSettingsWindow" Visibility="{Binding Visibility}" Background="DimGray">
             <ContentControl 

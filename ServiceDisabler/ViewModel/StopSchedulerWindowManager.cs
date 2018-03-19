@@ -2,19 +2,19 @@
 
 namespace ServiceDisabler
 {
-    internal class StopSettingsWindowManager : BaseViewModel
+    internal class StopSchedulerWindowManager : BaseViewModel
     {
-        public StopSettingsWindowManager()
+        public StopSchedulerWindowManager()
         {
             Visibility = Visibility.Collapsed;
             Content = null;
         }
 
-        private static StopSettingsWindowManager _instance;
+        private static StopSchedulerWindowManager _instance;
 
-        public static StopSettingsWindowManager Instance =>
+        public static StopSchedulerWindowManager Instance =>
             _instance ??
-            (_instance = new StopSettingsWindowManager());
+            (_instance = new StopSchedulerWindowManager());
 
         private FrameworkElement _content;
         public FrameworkElement Content
@@ -38,20 +38,23 @@ namespace ServiceDisabler
             }
         }
 
-        public void ShowSettingsWindow(FrameworkElement content)
+        /// <summary>
+        /// Show Scheduler
+        /// </summary>
+        /// <param name="content"></param>
+        public void ShowSchedulerWindow(FrameworkElement content)
         {
             Content = content;
-            //RaisePropertyChanged(nameof(Content));
             Visibility = Visibility.Visible;
-            //RaisePropertyChanged(nameof(Visibility));
         }
 
-        public void CloseSettingsWindow()
+        /// <summary>
+        /// Close scheduler
+        /// </summary>
+        public void CloseSchedulerWindow()
         {
             Visibility = Visibility.Collapsed;
-            //RaisePropertyChanged(nameof(Visibility));
             Content = null;
-            //RaisePropertyChanged(nameof(Content));
         }
     }
 }

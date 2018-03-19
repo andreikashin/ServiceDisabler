@@ -9,6 +9,11 @@ namespace ServiceDisabler.Helpers
 {
     public static class XmlHelper
     {
+        /// <summary>
+        /// Serialize object to XML
+        /// </summary>
+        /// <param name="obj">Object for serialization</param>
+        /// <returns></returns>
         public static string ToXml(object obj)
         {
             var T = obj.GetType();
@@ -23,6 +28,11 @@ namespace ServiceDisabler.Helpers
             return builder.ToString();
         }
 
+        /// <summary>
+        /// Save serialized object to file
+        /// </summary>
+        /// <param name="obj">Object for serialization</param>
+        /// <param name="path">Full filename</param>
         public static void ToXmlFile(object obj, string path)
         {
             using (var fs = new FileStream(path, FileMode.Create))
@@ -34,6 +44,12 @@ namespace ServiceDisabler.Helpers
 
         }
 
+        /// <summary>
+        /// Deserialize XML string
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="xml">XML string</param>
+        /// <returns></returns>
         public static T FromXml<T>(string xml)
         {
             using (var reader = new StringReader(xml))
@@ -43,6 +59,12 @@ namespace ServiceDisabler.Helpers
             }
         }
 
+        /// <summary>
+        /// Deserialize XML file
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static T FromXmlFile<T>(string path)
         {
             var reader = new StreamReader(path);

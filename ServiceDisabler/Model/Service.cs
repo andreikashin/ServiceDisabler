@@ -5,6 +5,9 @@ using System.Windows.Threading;
 
 namespace ServiceDisabler
 {
+    /// <summary>
+    /// Service model
+    /// </summary>
     internal class Service : INotifyPropertyChanged
     {
         private string _name;

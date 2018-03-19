@@ -6,8 +6,12 @@ using ServiceDisabler.Helpers;
 
 namespace ServiceDisabler.Services
 {
-    class ScheduleService : IScheduleService
+    internal class ScheduleService : IScheduleService
     {
+        /// <summary>
+        /// Get scheduled stop events for services
+        /// </summary>
+        /// <returns></returns>
         public StopSchedule GetSchedule()
         {
             var schedule = new StopSchedule
@@ -37,6 +41,11 @@ namespace ServiceDisabler.Services
             return schedule;
         }
 
+        /// <summary>
+        /// Update scheduled stop events
+        /// </summary>
+        /// <param name="currentSchedule"></param>
+        /// <param name="newStopTimeRecords"></param>
         public void UpdateSchedule(StopSchedule currentSchedule, StopTimeRecord[] newStopTimeRecords)
         {
             var newRecList = newStopTimeRecords.ToList();
@@ -59,6 +68,10 @@ namespace ServiceDisabler.Services
             }
         }
 
+        /// <summary>
+        /// Save scheduled stop events into file
+        /// </summary>
+        /// <param name="currentSchedule"></param>
         public void SaveSchedule(StopSchedule currentSchedule)
         {
             var directory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
